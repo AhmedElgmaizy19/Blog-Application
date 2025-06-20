@@ -1,0 +1,151 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Xtra Blog</title>
+	<link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}"> <!-- https://fontawesome.com/ -->
+	<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet"> <!-- https://fonts.google.com/ -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/templatemo-xtra-blog.css' %}" rel="stylesheet">
+  
+
+<!--
+    
+TemplateMo 553 Xtra Blog
+
+https://templatemo.com/tm-553-xtra-blog
+
+-->
+</head>
+<body>
+	<header class="tm-header" id="tm-header">
+        <div class="tm-header-wrapper">
+            <button class="navbar-toggler" type="button" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="tm-site-header">
+                <div class="mb-3 mx-auto tm-site-logo"><i class="fas fa-times fa-2x"></i></div>            
+                <h1 class="text-center">Xtra Blog</h1>
+            </div>
+            <nav class="tm-nav" id="tm-nav">            
+                <ul>
+                    <li class="tm-nav-item active"><a href="{% url 'home' %}" class="tm-nav-link">
+                        <i class="fas fa-home"></i>
+                        Blog Home
+                    </a></li>
+                    <li class="tm-nav-item"><a href="{% url 'create_post' %}" class="tm-nav-link">
+                        <i class="fas fa-pen"></i>
+                       Create Post
+                    </a></li>
+                    <li class="tm-nav-item"><a href="{% url 'about' %}" class="tm-nav-link">
+                        <i class="fas fa-users"></i>
+                        About
+                    </a></li>
+                    <!-- <li class="tm-nav-item"><a href="contact.html" class="tm-nav-link">
+                        <i class="far fa-comments"></i>
+                        Contact Us
+                    </a></li> -->
+                    {% if request.user.is_authenticated %}
+                        <li class="tm-nav-item"><a href="{% url 'logout' %}" class="tm-nav-link">
+                            <i class="fas fa-sign-out-alt"></i>
+                            logout
+                        </a></li>
+                    {% else %}
+
+                        <li class="tm-nav-item"><a href="{% url 'register' %}" class="tm-nav-link">
+                            <i class="fas fa-user-plus"></i>
+                            Sign Up
+                        </a></li>
+                        <li class="tm-nav-item"><a href="{% url 'login' %}" class="tm-nav-link">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login
+                        </a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <div class="tm-mb-65">
+                <a rel="nofollow" href="https://fb.com/templatemo" class="tm-social-link">
+                    <i class="fab fa-facebook tm-social-icon"></i>
+                </a>
+                <a href="https://twitter.com" class="tm-social-link">
+                    <i class="fab fa-twitter tm-social-icon"></i>
+                </a>
+                <a href="https://instagram.com" class="tm-social-link">
+                    <i class="fab fa-instagram tm-social-icon"></i>
+                </a>
+                <a href="https://linkedin.com" class="tm-social-link">
+                    <i class="fab fa-linkedin tm-social-icon"></i>
+                </a>
+            </div>
+            <p class="tm-mb-80 pr-5 text-white">
+                Xtra Blog is a multi-purpose HTML template from TemplateMo website. Left side is a sticky menu bar. Right side content will scroll up and down.
+            </p>
+        </div>
+    </header>
+    <div class="container-fluid">
+        <main class="tm-main">
+            {% for message in messages  %}
+            <div id="alert-1" class="flex items-center p-4 mb-4 text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+                <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                </svg>
+                <span class="sr-only">{{message.tags}}</span>
+                <div class="ms-3 text-sm font-medium">
+                  {{message}}
+                </div>
+                  <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-blue-50 text-blue-500 rounded-lg focus:ring-2 focus:ring-blue-400 p-1.5 hover:bg-blue-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-blue-400 dark:hover:bg-gray-700" data-dismiss-target="#alert-1" aria-label="Close">
+                    <span class="sr-only">Close</span>
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                </button>
+              </div>
+            {% endfor %}
+           
+            {% if request.user.is_authenticated %}
+            <div style="margin: 10px;">
+                {% if request.user.profile %}
+                <a href="{% url 'profile' request.user.profile.id %}" class="tm-profile-link">
+                    <span class="tm-profile-name">{{ request.user.username }}</span>
+                    
+                    <img src="{% if request.user.profile.img %}
+                                    {{ request.user.profile.img.url }} 
+                                {% else %}
+                                https://www.nicepng.com/png/detail/933-9332131_profile-picture-default-png.png
+                                {% endif %} " height="50" width="50" alt="Profile Image" style="border-radius: 30%; object-fit: cover;">
+                </a>
+                {% else %}
+                <span class="tm-profile-name">{{ request.user.username }}</span>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% if request.path == '/home/' %}
+            <!-- Search form -->
+                <div class="row tm-row">
+                    <div class="col-12">
+                        <form class="form-inline tm-mb-80 tm-search-form" action="{% url 'home' %}">                
+                            <input class="form-control tm-search-input" name="search" type="search" placeholder="Search..." aria-label="Search">
+                            <button class="tm-search-button" type="submit">
+                                <i class="fas fa-search tm-search-icon" aria-hidden="true"></i>
+                            </button>                                
+                        </form>
+                
+                        
+                        
+                    </div>                
+                </div>            
+            {% endif %}
+            
+            {% block content %}
+                
+            {% endblock content %}
+        </main>
+    </div>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/templatemo-script.js' %}"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    
+
+ <!-- Comments -->
+ <div>
+    <h2 class="tm-color-primary tm-post-title">Comments</h2>
+    <hr class="tm-hr-primary tm-mb-45">
+    {% for comment in comments  %}
+    <div class="tm-comment tm-mb-45">
+        <figure class="tm-comment-figure">
+            
+            <img src="{% if comment.user.profile.img %}
+            {{comment.user.profile.img.url}} {% else %}
+            https://www.nicepng.com/png/detail/933-9332131_profile-picture-default-png.png
+             {% endif %}" width="90" height="90" alt="Image" class="mb-2 rounded-circle img-thumbnail">
+       
+           
+                
+            
+            <figcaption class="tm-color-primary text-center">{{comment.user}}</figcaption>
+        </figure>
+        <div>
+            <p>
+                {{comment.comment}}
+            </p>
+            <div class="d-flex justify-content-between">
+                <a href="#" class="tm-color-primary">REPLY</a>
+                
+                <span class="tm-color-primary">&nbsp;{{comment.created_at|timesince}}</span>
+            </div>  
+                {% if request.user == comment.user %}
+                <form action="{% url 'comment_delete' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{comment.id}}" name="id-delete" id="id-delete">
+                    <button type="submit" class="btn btn-primary">delete</button>                                               
+                    </form>
+                    <form action="{% url 'update_comment' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{comment.id}}" name="id-update" id="id-update">
+                        <textarea class="form-control" name="message" id="message" rows="6">{{ comment.comment }}</textarea> 
+                        <button type="submit" class="btn btn-primary">update</button>    
+                    </form>
+                {% endif %}
+            
+           
+                                                     
+        </div>                                
+    </div>
+    {% endfor %}
+   
+ 
+    <form action="{% url 'comment' %}" method="post" class="mb-5 tm-comment-form">
+        {% csrf_token %}
+        <h2 class="tm-color-primary tm-post-title mb-4">Your comment</h2>
+        <div class="mb-4">
+            <input type="hidden" value="{{blog.id}}" name="id" id="id">
+            {{from.comment}}
+        </div>
+        <div class="text-right">
+            <button class="tm-btn tm-btn-primary tm-btn-small" type="submit">Submit</button>                        
+        </div>                                
+    </form>                          
+</div>
+{% endblock content %}

@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="">
+    <!-- {% if user.is_authenticated %}
+    <a href="{% url 'create_post' %}"><button type="submit" class="btn btn-danger"> create post</button></a>
+    {% endif %} -->
+   
+</div>
+<div class="row tm-row">
+    
+    {% for blog in all_blog %}
+    <article class="col-12 col-md-6 tm-post">
+        <hr class="tm-hr-primary">
+        <a href="{{blog.get_absolute_url}}" class="effect-lily tm-post-link tm-pt-60">
+            <div class="tm-post-link-inner">
+                <img src="{{ blog.img.url }}" alt="Image" class="img-fluid">                            
+            </div>
+            {% if forloop.counter == 1 or forloop.counter == 2 %}
+            <span class="position-absolute tm-new-badge">New</span>
+            {% endif %}
+          
+            <h2 class="tm-pt-30 tm-color-primary tm-post-title">{{ blog.title }}</h2>
+        </a>                    
+        <p class="tm-pt-30">
+            {{ blog.content }}
+        </p>
+        <div class="d-flex justify-content-between tm-pt-45">
+            <!-- <span class="tm-color-primary">{{ blog.tags }}</span> -->
+            <span class="tm-color-primary">{{ blog.date }}</span>
+        </div>
+        
+        <hr>
+        <div class="d-flex justify-content-between">
+            <!-- <span>36 comments</span> -->
+            <span>{{ blog.author }}</span>
+        </div>
+    </article>
+    {% endfor %}
+</div>
+{% if all_blog.has_other_pages  %}
+    
+<div class="row tm-row tm-mt-100 tm-mb-75">
+    <div class="tm-prev-next-wrapper">
+        {% if all_blog.has_previous %}
+            <a href="?page={{all_blog.previous_page_number}}" class="mb-2 tm-btn tm-btn-primary tm-prev-next tm-mr-20">Prev</a>
+        {% else %}
+            <a href="#" class="mb-2 tm-btn tm-btn-primary disabled tm-prev-next tm-mr-20">Prev</a>
+        {% endif %}
+        {% if all_blog.has_next %}
+            <a href="?page={{all_blog.next_page_number}}" class="mb-2 tm-btn tm-btn-primary  tm-prev-next">Next</a>
+        {% else %}    
+            <a href="#" class="mb-2 tm-btn tm-btn-primary disabled tm-prev-next">Next</a>
+        {% endif %}
+    </div>
+    <div class="tm-paging-wrapper">
+        <span class="d-inline-block mr-3">Page</span>
+        <nav class="tm-paging-nav d-inline-block">
+            <ul>
+                {% for p in all_blog.paginator.page_range %}
+                    {% if all_blog.number == p %}
+                        
+                        <li class="tm-paging-item active">
+                            <a href="#" class="mb-2 tm-btn tm-paging-link">{{p}}</a>
+                        </li>
+                        
+                    {% else %}
+                    <li class="tm-paging-item ">
+                        <a href="?page={{p}}" class="mb-2 tm-btn tm-paging-link">{{p}}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+               
+            </ul>
+        </nav>
+    </div>                
+</div>            
+{% endif %}
+
+{% endblock content %}
